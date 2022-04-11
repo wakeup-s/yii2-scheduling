@@ -1,17 +1,16 @@
-FROM composer
+FROM composer:2 as composer
 
-FROM php:5.4-cli
+FROM php:7.4-cli-alpine as php
 
-RUN apt-get update && \
-    apt-get install -y \
+RUN apk add \
+        --no-cache \
+        oniguruma-dev \
         git \
         unzip
 
 RUN docker-php-ext-install mbstring
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
-
-RUN composer global require hirak/prestissimo
 
 WORKDIR /app
 

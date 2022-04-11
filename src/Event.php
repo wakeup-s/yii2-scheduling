@@ -141,9 +141,15 @@ class Event extends Component
      */
     protected function runCommandInForeground(Application $app)
     {
-        (new Process(
-            trim($this->buildCommand(), '& '), dirname($app->request->getScriptFile()), null, null, null
+
+        (Process::fromShellCommandline(
+            trim($this->buildCommand(), '& '),
+            dirname($app->request->getScriptFile()),
+            null,
+            null,
+            null
         ))->run();
+
         $this->callAfterCallbacks($app);
     }
 
@@ -203,7 +209,7 @@ class Event extends Component
         if ($this->_timezone) {
             $date->setTimezone($this->_timezone);
         }
-        return CronExpression::factory($this->_expression)->isDue($date);
+        return (new CronExpression($this->_expression))->isDue($date);
     }
 
     /**

@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace omnilight\scheduling\Tests;
 
+use PHPUnit\Framework\TestCase;
 use omnilight\scheduling\Event;
 use yii\mutex\Mutex;
 
-class EventTest extends \PHPUnit_Framework_TestCase
+class EventTest extends TestCase
 {
     public function buildCommandData()
     {
@@ -24,9 +27,9 @@ class EventTest extends \PHPUnit_Framework_TestCase
      * @param string $outputTo
      * @param string $result
      */
-    public function testBuildCommandSendOutputTo($omitErrors, $command, $outputTo, $result)
+    public function testBuildCommandSendOutputTo($omitErrors, $command, $outputTo, $result): void
     {
-        $event = new Event($this->getMock(Mutex::className()), $command);
+        $event = new Event($this->createMock(Mutex::class), $command);
         $event->omitErrors($omitErrors);
         $event->sendOutputTo($outputTo);
         $this->assertSame($result, $event->buildCommand());
